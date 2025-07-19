@@ -45,23 +45,27 @@ function createWindow() {
     mainWindow = new BrowserWindow({
         width: 1400,
         height: 900,
-        minWidth: 1200,
-        minHeight: 800,
+        minWidth: 1000,
+        minHeight: 600,
         webPreferences: {
-            nodeIntegration: false, // Security: disable node integration
-            contextIsolation: true, // Security: enable context isolation
-            enableRemoteModule: false, // Security: disable remote module
-            webSecurity: true, // Enable web security
-            preload: path.join(__dirname, 'preload.js') // Add preload script for security
+            nodeIntegration: false,
+            contextIsolation: true,
+            enableRemoteModule: false,
+            webSecurity: true,
+            preload: path.join(__dirname, 'preload.js')
         },
         icon: path.join(__dirname, 'assets/icon.png'),
         show: false,
         titleBarStyle: 'default',
-        frame: true
+        frame: true,
+        resizable: true, // Ensure window is resizable
+        minimizable: true, // Ensure window is minimizable
+        maximizable: true, // Ensure window is maximizable
+        closable: true // Ensure window is closable
     });
 
-    // Start maximized
-    mainWindow.maximize();
+    // Don't start maximized - let user control window size
+    // mainWindow.maximize();
 
     // Load the appropriate URL/file
     const startUrl = isDev
@@ -115,11 +119,11 @@ function createWindow() {
                     accelerator: 'CmdOrCtrl+N',
                     click: () => {
                         mainWindow.webContents.executeJavaScript(`
-              if (window.location.pathname.includes('/dashboard/')) {
-                const outlet = window.location.pathname.split('/')[2];
-                window.location.href = '/products/' + outlet + '/add';
-              }
-            `);
+                            if (window.location.pathname.includes('/dashboard/')) {
+                                const outlet = window.location.pathname.split('/')[2];
+                                window.location.href = '/products/' + outlet + '/add';
+                            }
+                        `);
                     }
                 },
                 { type: 'separator' },
@@ -130,6 +134,18 @@ function createWindow() {
                         app.quit();
                     }
                 }
+            ]
+        },
+        {
+            label: 'Edit',
+            submenu: [
+                { role: 'undo' },
+                { role: 'redo' },
+                { type: 'separator' },
+                { role: 'cut' },
+                { role: 'copy' },
+                { role: 'paste' },
+                { role: 'selectall' }
             ]
         },
         {
