@@ -131,85 +131,63 @@ const UpdateQuantity = () => {
 
   if (loading) {
     return (
-        <Container fluid className="vh-100">
-          <Row className="h-100">
-            <Col md={3} lg={2} className="px-0">
-              <Sidebar outlet={outlet} />
-            </Col>
-            <Col md={9} lg={10} className="d-flex align-items-center justify-content-center">
-              <div className="text-center">
-                <div className="spinner-border text-primary mb-3" role="status" style={{ width: '3rem', height: '3rem' }}>
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-                <h5 className="text-muted">Loading inventory...</h5>
+        <div className="app-container">
+          <Sidebar outlet={outlet} />
+          <main className="main-content">
+            <div className="content-wrapper text-center py-5">
+              <div className="spinner-border text-primary mb-3" role="status">
+                <span className="visually-hidden">Loading...</span>
               </div>
-            </Col>
-          </Row>
-        </Container>
+              <h5 className="text-muted">Loading inventory...</h5>
+            </div>
+          </main>
+        </div>
     );
   }
 
   return (
-      <Container fluid className="vh-100">
-        <Row className="h-100">
-          {/* Sidebar */}
-          <Col md={3} lg={2} className="px-0 bg-light border-end">
-            <Sidebar outlet={outlet} />
-          </Col>
-
-          {/* Main Content */}
-          <Col md={9} lg={10} className="d-flex flex-column overflow-hidden">
-
-            {/* Fixed Header */}
-            <div className="bg-white border-bottom shadow-sm sticky-top" style={{ zIndex: 1020 }}>
-              <div className="p-4">
-                {/* Professional Header */}
-                <div className="d-flex justify-content-between align-items-center mb-3">
-                  <div>
-                    <h2 className="mb-1 fw-bold text-dark d-flex align-items-center">
-                      <i className="bi bi-box-arrow-up-right me-3 text-primary"></i>
-                      Inventory Management
-                    </h2>
-                    <p className="mb-0 text-muted fw-medium">
-                      {outlet.charAt(0).toUpperCase() + outlet.slice(1)} Store
-                      {getPendingUpdatesCount() > 0 && (
-                          <span className="ms-3 text-warning">
-                        <i className="bi bi-clock me-1"></i>
-                            {getPendingUpdatesCount()} pending updates
-                      </span>
-                      )}
-                    </p>
-                  </div>
-                  <div className="text-end">
-                    <div className="h4 mb-0 fw-bold text-primary">{filteredProducts.length}</div>
-                    <small className="text-muted">Products</small>
-                  </div>
-                </div>
-
-                {/* Alerts */}
-                {error && (
-                    <Alert variant="danger" className="border-0 mb-3" style={{ borderRadius: '8px' }}>
-                      <div className="d-flex align-items-center">
-                        <i className="bi bi-exclamation-triangle-fill me-2"></i>
-                        <div><strong>Error:</strong> {error}</div>
-                      </div>
-                    </Alert>
+      <div className="app-container">
+        <Sidebar outlet={outlet} />
+        <main className="main-content">
+          <div className="content-wrapper">
+            {/* Header Section */}
+            <div className="page-header">
+              <h2 className="page-title">
+                <i className="bi bi-box-arrow-up-right me-2"></i>
+                Inventory Management
+              </h2>
+              <div className="page-date">
+                {outlet.charAt(0).toUpperCase() + outlet.slice(1)} Store
+                {getPendingUpdatesCount() > 0 && (
+                    <span className="ms-3 text-warning">
+                <i className="bi bi-clock me-1"></i>
+                      {getPendingUpdatesCount()} pending updates
+              </span>
                 )}
+              </div>
+            </div>
 
-                {success && (
-                    <Alert variant="success" className="border-0 mb-3" style={{ borderRadius: '8px' }}>
-                      <div className="d-flex align-items-center">
-                        <i className="bi bi-check-circle-fill me-2"></i>
-                        <div><strong>Success:</strong> {success}</div>
-                      </div>
-                    </Alert>
-                )}
+            {error && (
+                <Alert variant="danger" className="mb-4">
+                  <i className="bi bi-exclamation-triangle-fill me-2"></i>
+                  {error}
+                </Alert>
+            )}
 
-                {/* Search Bar */}
-                <Row className="g-3 align-items-center">
+            {success && (
+                <Alert variant="success" className="mb-4">
+                  <i className="bi bi-check-circle-fill me-2"></i>
+                  {success}
+                </Alert>
+            )}
+
+            {/* Search Bar */}
+            <Card className="mb-4">
+              <Card.Body>
+                <Row className="g-3">
                   <Col md={8}>
                     <InputGroup>
-                      <InputGroup.Text className="bg-light border-end-0">
+                      <InputGroup.Text>
                         <i className="bi bi-search text-muted"></i>
                       </InputGroup.Text>
                       <Form.Control
@@ -217,211 +195,159 @@ const UpdateQuantity = () => {
                           placeholder="Search by name, brand, or SKU..."
                           value={searchTerm}
                           onChange={(e) => setSearchTerm(e.target.value)}
-                          className="border-start-0"
                       />
                     </InputGroup>
                   </Col>
-                  <Col md={4}>
+                  <Col md={4} className="text-end">
                     {getPendingUpdatesCount() > 0 && (
-                        <div className="text-end">
-                          <Badge bg="warning" text="dark" className="px-3 py-2 fw-semibold">
-                            <i className="bi bi-hourglass-split me-2"></i>
-                            {getPendingUpdatesCount()} Pending
-                          </Badge>
-                        </div>
+                        <Badge bg="warning" text="dark" className="px-3 py-2">
+                          <i className="bi bi-hourglass-split me-2"></i>
+                          {getPendingUpdatesCount()} Pending
+                        </Badge>
                     )}
                   </Col>
                 </Row>
-              </div>
+              </Card.Body>
+            </Card>
+
+            {/* Main Table - Scrollable Area */}
+            <div className="table-container">
+              <Card>
+                <Card.Header>
+                  <h5 className="mb-0">
+                    <i className="bi bi-table me-2"></i>
+                    Stock Management
+                  </h5>
+                </Card.Header>
+                <Card.Body className="p-0">
+                  {filteredProducts.length > 0 ? (
+                      <div className="table-responsive">
+                        <Table hover>
+                          <thead>
+                          <tr>
+                            <th>SKU</th>
+                            <th>Product</th>
+                            <th>Current</th>
+                            <th>Update To</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                          {filteredProducts.map((product) => (
+                              <tr key={product._id} className={hasChanges(product._id) ? 'table-warning' : ''}>
+                                <td>{product.sku}</td>
+                                <td>
+                                  <div className="fw-semibold">{product.name}</div>
+                                  <small className="text-muted">{product.brand}</small>
+                                </td>
+                                <td className="text-center">
+                                  <span className="fw-bold">{product.quantity}</span>
+                                </td>
+                                <td className="text-center">
+                                  <Form.Control
+                                      type="number"
+                                      min="0"
+                                      value={getCurrentQuantity(product)}
+                                      onChange={(e) => handleQuantityChange(product._id, e.target.value)}
+                                      className="text-center"
+                                  />
+                                </td>
+                                <td className="text-center">
+                                  {getStockStatus(product)}
+                                </td>
+                                <td className="text-center">
+                                  <Button
+                                      variant={hasChanges(product._id) ? "success" : "outline-primary"}
+                                      size="sm"
+                                      onClick={() => updateProductQuantity(product._id)}
+                                  >
+                                    {hasChanges(product._id) ? (
+                                        <>
+                                          <i className="bi bi-check-circle me-1"></i>
+                                          Apply
+                                        </>
+                                    ) : (
+                                        <>
+                                          <i className="bi bi-arrow-repeat me-1"></i>
+                                          Update
+                                        </>
+                                    )}
+                                  </Button>
+                                </td>
+                              </tr>
+                          ))}
+                          </tbody>
+                        </Table>
+                      </div>
+                  ) : (
+                      <div className="text-center py-5">
+                        <i className="bi bi-inbox display-4 text-muted mb-3"></i>
+                        <h4>No Products Found</h4>
+                        <p className="text-muted mb-3">
+                          {searchTerm
+                              ? "No products match your search criteria."
+                              : "No products available for stock updates."}
+                        </p>
+                        {searchTerm && (
+                            <Button variant="outline-primary" onClick={() => setSearchTerm("")}>
+                              Clear Search
+                            </Button>
+                        )}
+                      </div>
+                  )}
+                </Card.Body>
+              </Card>
             </div>
 
-            {/* Scrollable Content Area */}
-            <div className="flex-grow-1 overflow-auto">
-              <div className="p-4">
-
-                {/* Main Table Card */}
-                <Card className="border-0 shadow-sm">
-                  <Card.Header className="bg-primary text-white border-0 py-3">
-                    <h5 className="mb-0 fw-semibold d-flex align-items-center">
-                      <i className="bi bi-table me-2"></i>
-                      Stock Management
-                    </h5>
-                  </Card.Header>
-                  <Card.Body className="p-0">
-                    {filteredProducts.length > 0 ? (
-                        <div className="table-responsive">
-                          <Table className="mb-0 align-middle" hover>
-                            <thead className="bg-light">
-                            <tr>
-                              <th className="fw-semibold py-3 border-0 text-dark">
-                                <i className="bi bi-upc-scan me-2 text-primary"></i>SKU
-                              </th>
-                              <th className="fw-semibold py-3 border-0 text-dark">
-                                <i className="bi bi-box me-2 text-primary"></i>Product
-                              </th>
-                              <th className="fw-semibold py-3 border-0 text-dark text-center">
-                                <i className="bi bi-archive me-2 text-primary"></i>Current
-                              </th>
-                              <th className="fw-semibold py-3 border-0 text-dark text-center">
-                                <i className="bi bi-pencil me-2 text-primary"></i>Update To
-                              </th>
-                              <th className="fw-semibold py-3 border-0 text-dark text-center">
-                                <i className="bi bi-graph-up me-2 text-primary"></i>Status
-                              </th>
-                              <th className="fw-semibold py-3 border-0 text-dark text-center">
-                                <i className="bi bi-gear me-2 text-primary"></i>Action
-                              </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {filteredProducts.map((product, index) => (
-                                <tr
-                                    key={product._id}
-                                    className={`
-                                ${index % 2 === 0 ? "bg-white" : "bg-light bg-opacity-50"} 
-                                ${hasChanges(product._id) ? 'border-start border-warning border-3' : ''}
-                              `}
-                                >
-                                  <td className="py-3">
-                                    <code className="bg-dark text-white px-2 py-1 rounded fw-bold small">
-                                      {product.sku}
-                                    </code>
-                                  </td>
-                                  <td className="py-3">
-                                    <div>
-                                      <div className="fw-semibold text-dark mb-1">{product.name}</div>
-                                      <div className="text-muted small">
-                                        <i className="bi bi-tag me-1"></i>
-                                        {product.brand}
-                                      </div>
-                                    </div>
-                                  </td>
-                                  <td className="py-3 text-center">
-                                    <div className="d-flex flex-column align-items-center">
-                                      <span className="fw-bold h5 mb-0 text-dark">{product.quantity}</span>
-                                      <small className="text-muted">units</small>
-                                    </div>
-                                  </td>
-                                  <td className="py-3 text-center">
-                                    <div style={{ width: '100px', margin: '0 auto' }}>
-                                      <Form.Control
-                                          type="number"
-                                          min="0"
-                                          value={getCurrentQuantity(product)}
-                                          onChange={(e) =>
-                                              handleQuantityChange(
-                                                  product._id,
-                                                  e.target.value
-                                              )
-                                          }
-                                          className={`text-center fw-semibold ${hasChanges(product._id) ? 'border-warning bg-warning bg-opacity-10' : ''}`}
-                                          size="sm"
-                                      />
-                                    </div>
-                                  </td>
-                                  <td className="py-3 text-center">
-                                    {getStockStatus(product)}
-                                  </td>
-                                  <td className="py-3 text-center">
-                                    <Button
-                                        variant={hasChanges(product._id) ? "success" : "outline-primary"}
-                                        size="sm"
-                                        className="fw-semibold px-3"
-                                        onClick={() => updateProductQuantity(product._id)}
-                                    >
-                                      {hasChanges(product._id) ? (
-                                          <>
-                                            <i className="bi bi-check-circle me-1"></i>
-                                            Apply
-                                          </>
-                                      ) : (
-                                          <>
-                                            <i className="bi bi-arrow-repeat me-1"></i>
-                                            Update
-                                          </>
-                                      )}
-                                    </Button>
-                                  </td>
-                                </tr>
-                            ))}
-                            </tbody>
-                          </Table>
-                        </div>
-                    ) : (
-                        <div className="text-center py-5">
-                          <div className="mb-4">
-                            <i className="bi bi-inbox display-1 text-muted opacity-50"></i>
-                          </div>
-                          <h4 className="text-muted mb-2">No Products Found</h4>
-                          <p className="text-muted mb-3">
-                            {searchTerm
-                                ? "No products match your search criteria."
-                                : "No products available for stock updates."}
-                          </p>
-                          {searchTerm && (
-                              <Button
-                                  variant="outline-primary"
-                                  onClick={() => setSearchTerm("")}
-                              >
-                                <i className="bi bi-x-circle me-2"></i>
-                                Clear Search
-                              </Button>
-                          )}
-                        </div>
-                    )}
-                  </Card.Body>
-                </Card>
-
-                {/* Quick Stats */}
-                {filteredProducts.length > 0 && (
-                    <Row className="mt-4 g-3">
-                      <Col md={3}>
-                        <Card className="border-0 bg-primary bg-opacity-10 text-center h-100">
-                          <Card.Body className="py-4">
-                            <i className="bi bi-boxes text-primary display-6 mb-2"></i>
-                            <h4 className="fw-bold mb-1 text-primary">{filteredProducts.length}</h4>
-                            <small className="text-muted">Total Products</small>
-                          </Card.Body>
-                        </Card>
-                      </Col>
-                      <Col md={3}>
-                        <Card className="border-0 bg-warning bg-opacity-10 text-center h-100">
-                          <Card.Body className="py-4">
-                            <i className="bi bi-exclamation-triangle text-warning display-6 mb-2"></i>
-                            <h4 className="fw-bold mb-1 text-warning">
-                              {filteredProducts.filter(p => p.quantity <= p.minStockLevel && p.quantity > 0).length}
-                            </h4>
-                            <small className="text-muted">Low Stock</small>
-                          </Card.Body>
-                        </Card>
-                      </Col>
-                      <Col md={3}>
-                        <Card className="border-0 bg-danger bg-opacity-10 text-center h-100">
-                          <Card.Body className="py-4">
-                            <i className="bi bi-x-circle text-danger display-6 mb-2"></i>
-                            <h4 className="fw-bold mb-1 text-danger">
-                              {filteredProducts.filter(p => p.quantity === 0).length}
-                            </h4>
-                            <small className="text-muted">Out of Stock</small>
-                          </Card.Body>
-                        </Card>
-                      </Col>
-                      <Col md={3}>
-                        <Card className="border-0 bg-info bg-opacity-10 text-center h-100">
-                          <Card.Body className="py-4">
-                            <i className="bi bi-clock text-info display-6 mb-2"></i>
-                            <h4 className="fw-bold mb-1 text-info">{getPendingUpdatesCount()}</h4>
-                            <small className="text-muted">Pending Updates</small>
-                          </Card.Body>
-                        </Card>
-                      </Col>
-                    </Row>
-                )}
-              </div>
-            </div>
-          </Col>
-        </Row>
-      </Container>
+            {/* Quick Stats */}
+            {filteredProducts.length > 0 && (
+                <Row className="mt-4 g-3">
+                  <Col md={3}>
+                    <Card className="text-center">
+                      <Card.Body>
+                        <i className="bi bi-boxes text-primary display-6 mb-2"></i>
+                        <h4 className="fw-bold mb-1">{filteredProducts.length}</h4>
+                        <small className="text-muted">Total Products</small>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                  <Col md={3}>
+                    <Card className="text-center">
+                      <Card.Body>
+                        <i className="bi bi-exclamation-triangle text-warning display-6 mb-2"></i>
+                        <h4 className="fw-bold mb-1">
+                          {filteredProducts.filter(p => p.quantity <= p.minStockLevel && p.quantity > 0).length}
+                        </h4>
+                        <small className="text-muted">Low Stock</small>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                  <Col md={3}>
+                    <Card className="text-center">
+                      <Card.Body>
+                        <i className="bi bi-x-circle text-danger display-6 mb-2"></i>
+                        <h4 className="fw-bold mb-1">
+                          {filteredProducts.filter(p => p.quantity === 0).length}
+                        </h4>
+                        <small className="text-muted">Out of Stock</small>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                  <Col md={3}>
+                    <Card className="text-center">
+                      <Card.Body>
+                        <i className="bi bi-clock text-info display-6 mb-2"></i>
+                        <h4 className="fw-bold mb-1">{getPendingUpdatesCount()}</h4>
+                        <small className="text-muted">Pending Updates</small>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                </Row>
+            )}
+          </div>
+        </main>
+      </div>
   );
 };
 
