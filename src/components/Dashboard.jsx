@@ -52,171 +52,171 @@ const Dashboard = () => {
     };
 
     return (
-        <div className="d-flex">
+        <div className="app-container">
             <Sidebar outlet={outlet} />
-            <div className="main-content">
-                <div className="p-4">
-                    <div className="page-header d-flex justify-content-between align-items-center">
-                        <h2 className="mb-0">
-                            <i className="bi bi-speedometer2 me-3"></i>
+            <main className="main-content">
+                <div className="content-wrapper">
+                    <div className="page-header">
+                        <h2 className="page-title">
+                            <i className="bi bi-speedometer2 me-2"></i>
                             Dashboard - {outlet.charAt(0).toUpperCase() + outlet.slice(1)}
                         </h2>
-                        <div className="text-muted">
+                        <div className="page-date">
                             <i className="bi bi-calendar-date me-2"></i>
                             {new Date().toLocaleDateString()}
                         </div>
                     </div>
 
                     {loading ? (
-                        <div className="text-center py-5">
+                        <div className="loading-container">
                             <div className="spinner-border text-primary" role="status">
                                 <span className="visually-hidden">Loading...</span>
                             </div>
+                            <p className="loading-text">Loading dashboard data...</p>
                         </div>
                     ) : (
-                        <>
-                            <Row className="mb-4">
-                                <Col xl={3} lg={6} md={6} className="mb-4">
-                                    <Card className="dashboard-card summary-card bg-primary text-white h-100">
-                                        <Card.Body>
-                                            <div className="d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <Card.Title className="mb-2">Total Products</Card.Title>
-                                                    <h2 className="mb-0">{stats.totalProducts}</h2>
-                                                </div>
-                                                <div className="text-end">
-                                                    <i className="bi bi-box-seam" style={{ fontSize: '3rem', opacity: 0.8 }}></i>
-                                                </div>
+                        <div className="dashboard-content">
+                            <div className="stats-grid">
+                                <Card className="stat-card stat-primary">
+                                    <Card.Body>
+                                        <div className="stat-content">
+                                            <div className="stat-info">
+                                                <h3 className="stat-title">Total Products</h3>
+                                                <div className="stat-value">{stats.totalProducts}</div>
                                             </div>
-                                        </Card.Body>
-                                    </Card>
-                                </Col>
-
-                                <Col xl={3} lg={6} md={6} className="mb-4">
-                                    <Card className="dashboard-card bg-warning text-white h-100">
-                                        <Card.Body>
-                                            <div className="d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <Card.Title className="mb-2">Low Stock</Card.Title>
-                                                    <h2 className="mb-0">{stats.lowStockProducts}</h2>
-                                                </div>
-                                                <div className="text-end">
-                                                    <i className="bi bi-exclamation-triangle" style={{ fontSize: '3rem', opacity: 0.8 }}></i>
-                                                </div>
+                                            <div className="stat-icon">
+                                                <i className="bi bi-box-seam"></i>
                                             </div>
-                                        </Card.Body>
-                                    </Card>
-                                </Col>
+                                        </div>
+                                    </Card.Body>
+                                </Card>
 
-                                <Col xl={3} lg={6} md={6} className="mb-4">
-                                    <Card className="dashboard-card bg-success text-white h-100">
-                                        <Card.Body>
-                                            <div className="d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <Card.Title className="mb-2">Today's Sales</Card.Title>
-                                                    <h2 className="mb-0">{formatCurrency(stats.todaySales)}</h2>
-                                                </div>
-                                                <div className="text-end">
-                                                    <i className="bi bi-currency-dollar" style={{ fontSize: '3rem', opacity: 0.8 }}></i>
-                                                </div>
+                                <Card className="stat-card stat-warning">
+                                    <Card.Body>
+                                        <div className="stat-content">
+                                            <div className="stat-info">
+                                                <h3 className="stat-title">Low Stock</h3>
+                                                <div className="stat-value">{stats.lowStockProducts}</div>
                                             </div>
-                                        </Card.Body>
-                                    </Card>
-                                </Col>
-
-                                <Col xl={3} lg={6} md={6} className="mb-4">
-                                    <Card className="dashboard-card bg-info text-white h-100">
-                                        <Card.Body>
-                                            <div className="d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <Card.Title className="mb-2">Today's Profit</Card.Title>
-                                                    <h2 className="mb-0">{formatCurrency(stats.todayProfit)}</h2>
-                                                </div>
-                                                <div className="text-end">
-                                                    <i className="bi bi-graph-up" style={{ fontSize: '3rem', opacity: 0.8 }}></i>
-                                                </div>
+                                            <div className="stat-icon">
+                                                <i className="bi bi-exclamation-triangle"></i>
                                             </div>
-                                        </Card.Body>
-                                    </Card>
-                                </Col>
-                            </Row>
+                                        </div>
+                                    </Card.Body>
+                                </Card>
 
-                            <Row>
-                                <Col lg={6} className="mb-4">
-                                    <Card className="dashboard-card h-100">
-                                        <Card.Header>
-                                            <h5 className="mb-0"><i className="bi bi-list-check me-2"></i>Quick Actions</h5>
-                                        </Card.Header>
-                                        <ListGroup variant="flush">
-                                            <ListGroup.Item className="d-flex justify-content-between align-items-center py-3">
-                                                <div>
-                                                    <i className="bi bi-plus-circle me-3 text-primary"></i>
-                                                    <span>Add New Product</span>
-                                                </div>
-                                                <a href={`/products/${outlet}/add`} className="btn btn-sm btn-outline-primary">
-                                                    Go <i className="bi bi-arrow-right ms-1"></i>
-                                                </a>
-                                            </ListGroup.Item>
-                                            <ListGroup.Item className="d-flex justify-content-between align-items-center py-3">
-                                                <div>
-                                                    <i className="bi bi-cart-plus me-3 text-success"></i>
-                                                    <span>Create New Bill</span>
-                                                </div>
-                                                <a href={`/billing/${outlet}`} className="btn btn-sm btn-outline-success">
-                                                    Go <i className="bi bi-arrow-right ms-1"></i>
-                                                </a>
-                                            </ListGroup.Item>
-                                            <ListGroup.Item className="d-flex justify-content-between align-items-center py-3">
-                                                <div>
-                                                    <i className="bi bi-arrow-up-circle me-3 text-warning"></i>
-                                                    <span>Update Stock</span>
-                                                </div>
-                                                <a href={`/update-quantity/${outlet}`} className="btn btn-sm btn-outline-warning">
-                                                    Go <i className="bi bi-arrow-right ms-1"></i>
-                                                </a>
-                                            </ListGroup.Item>
-                                            <ListGroup.Item className="d-flex justify-content-between align-items-center py-3">
-                                                <div>
-                                                    <i className="bi bi-graph-up me-3 text-info"></i>
-                                                    <span>View Reports</span>
-                                                </div>
-                                                <a href={`/reports/${outlet}`} className="btn btn-sm btn-outline-info">
-                                                    Go <i className="bi bi-arrow-right ms-1"></i>
-                                                </a>
-                                            </ListGroup.Item>
-                                        </ListGroup>
-                                    </Card>
-                                </Col>
+                                <Card className="stat-card stat-success">
+                                    <Card.Body>
+                                        <div className="stat-content">
+                                            <div className="stat-info">
+                                                <h3 className="stat-title">Today's Sales</h3>
+                                                <div className="stat-value">{formatCurrency(stats.todaySales)}</div>
+                                            </div>
+                                            <div className="stat-icon">
+                                                <i className="bi bi-currency-dollar"></i>
+                                            </div>
+                                        </div>
+                                    </Card.Body>
+                                </Card>
 
-                                <Col lg={6} className="mb-4">
-                                    <Card className="dashboard-card h-100">
-                                        <Card.Header>
-                                            <h5 className="mb-0"><i className="bi bi-info-circle me-2"></i>System Information</h5>
-                                        </Card.Header>
-                                        <Card.Body>
-                                            <div className="mb-3">
+                                <Card className="stat-card stat-info">
+                                    <Card.Body>
+                                        <div className="stat-content">
+                                            <div className="stat-info">
+                                                <h3 className="stat-title">Today's Profit</h3>
+                                                <div className="stat-value">{formatCurrency(stats.todayProfit)}</div>
+                                            </div>
+                                            <div className="stat-icon">
+                                                <i className="bi bi-graph-up"></i>
+                                            </div>
+                                        </div>
+                                    </Card.Body>
+                                </Card>
+                            </div>
+
+                            <div className="cards-grid">
+                                <Card className="action-card">
+                                    <Card.Header>
+                                        <h5 className="card-title">
+                                            <i className="bi bi-list-check me-2"></i>
+                                            Quick Actions
+                                        </h5>
+                                    </Card.Header>
+                                    <div className="action-list">
+                                        <div className="action-item">
+                                            <div className="action-info">
+                                                <i className="bi bi-plus-circle action-icon text-primary"></i>
+                                                <span className="action-label">Add New Product</span>
+                                            </div>
+                                            <a href={`/products/${outlet}/add`} className="btn btn-sm btn-outline-primary">
+                                                Go <i className="bi bi-arrow-right ms-1"></i>
+                                            </a>
+                                        </div>
+                                        <div className="action-item">
+                                            <div className="action-info">
+                                                <i className="bi bi-cart-plus action-icon text-success"></i>
+                                                <span className="action-label">Create New Bill</span>
+                                            </div>
+                                            <a href={`/billing/${outlet}`} className="btn btn-sm btn-outline-success">
+                                                Go <i className="bi bi-arrow-right ms-1"></i>
+                                            </a>
+                                        </div>
+                                        <div className="action-item">
+                                            <div className="action-info">
+                                                <i className="bi bi-arrow-up-circle action-icon text-warning"></i>
+                                                <span className="action-label">Update Stock</span>
+                                            </div>
+                                            <a href={`/update-quantity/${outlet}`} className="btn btn-sm btn-outline-warning">
+                                                Go <i className="bi bi-arrow-right ms-1"></i>
+                                            </a>
+                                        </div>
+                                        <div className="action-item">
+                                            <div className="action-info">
+                                                <i className="bi bi-graph-up action-icon text-info"></i>
+                                                <span className="action-label">View Reports</span>
+                                            </div>
+                                            <a href={`/reports/${outlet}`} className="btn btn-sm btn-outline-info">
+                                                Go <i className="bi bi-arrow-right ms-1"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </Card>
+
+                                <Card className="info-card">
+                                    <Card.Header>
+                                        <h5 className="card-title">
+                                            <i className="bi bi-info-circle me-2"></i>
+                                            System Information
+                                        </h5>
+                                    </Card.Header>
+                                    <Card.Body>
+                                        <div className="info-grid">
+                                            <div className="info-item">
                                                 <strong>Current Outlet:</strong>
                                                 <span className="badge bg-primary ms-2">
-                          {outlet.charAt(0).toUpperCase() + outlet.slice(1)}
-                        </span>
+                                                    {outlet.charAt(0).toUpperCase() + outlet.slice(1)}
+                                                </span>
                                             </div>
-                                            <div className="mb-3">
-                                                <strong>System Version:</strong> <span className="text-muted">1.0.0</span>
+                                            <div className="info-item">
+                                                <strong>System Version:</strong>
+                                                <span className="text-muted">1.0.0</span>
                                             </div>
-                                            <div className="mb-3">
-                                                <strong>Database:</strong> <span className="text-success">MongoDB Atlas</span>
+                                            <div className="info-item">
+                                                <strong>Database:</strong>
+                                                <span className="text-success">MongoDB Atlas</span>
                                             </div>
-                                            <div className="mb-0">
-                                                <strong>Last Updated:</strong> <span className="text-muted">{new Date().toLocaleString()}</span>
+                                            <div className="info-item">
+                                                <strong>Last Updated:</strong>
+                                                <span className="text-muted">{new Date().toLocaleString()}</span>
                                             </div>
-                                        </Card.Body>
-                                    </Card>
-                                </Col>
-                            </Row>
-                        </>
+                                        </div>
+                                    </Card.Body>
+                                </Card>
+                            </div>
+                        </div>
                     )}
                 </div>
-            </div>
+            </main>
         </div>
     );
 };

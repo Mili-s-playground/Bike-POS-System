@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Nav, Navbar } from 'react-bootstrap';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const Sidebar = ({ outlet }) => {
     const navigate = useNavigate();
     const location = useLocation();
+    const [isCollapsed, setIsCollapsed] = useState(false);
 
     const menuItems = [
         {
@@ -44,61 +45,76 @@ const Sidebar = ({ outlet }) => {
         }
     ];
 
-    return (
-        <div className="sidebar pt-2">
-            <Navbar.Brand className="navbar-brand">
-                <i className="bi bi-bicycle me-2 fs-2"></i>
-                Bike POS
-            </Navbar.Brand>
+    const toggleSidebar = () => {
+        setIsCollapsed(!isCollapsed);
+    };
 
-            <div className="p-3 border-bottom border-light border-opacity-25">
-                <small className="text-light opacity-75 d-block fs-3 fw-bold">Current Outlet</small>
-                <div className="fw-bold text-capitalize text-warning">{outlet}</div>
+    return (
+        <div className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
+            <div className="sidebar-header">
+                <Navbar.Brand className="sidebar-brand">
+                    <i className="bi bi-bicycle brand-icon"></i>
+                    {!isCollapsed && <span className="brand-text">Bike POS</span>}
+                </Navbar.Brand>
+                <button
+                    className="sidebar-toggle"
+                    onClick={toggleSidebar}
+                    aria-label="Toggle sidebar"
+                >
+                    <i className={`bi ${isCollapsed ? 'bi-chevron-right' : 'bi-chevron-left'}`}></i>
+                </button>
             </div>
 
-            <Nav className="flex-column">
+            {!isCollapsed && (
+                <div className="outlet-info">
+                    <div className="outlet-label">Current Outlet</div>
+                    <div className="outlet-name">{outlet.charAt(0).toUpperCase() + outlet.slice(1)}</div>
+                </div>
+            )}
+
+            <Nav className="sidebar-nav">
                 {menuItems.map((item) => (
                     <Nav.Link
                         key={item.path}
                         href="#"
-                        className={`nav-link px-3 py-3 fs-4 ${
-                            location.pathname === item.path ? 'active' : ''
-                        }`}
+                        className={`nav-item ${location.pathname === item.path ? 'active' : ''}`}
                         onClick={(e) => {
                             e.preventDefault();
                             navigate(item.path);
                         }}
+                        title={isCollapsed ? item.label : ''}
                     >
-                        <i className={`${item.icon} me-2 fs-2`}></i>
-                        {item.label}
+                        <i className={`${item.icon} nav-icon`}></i>
+                        {!isCollapsed && <span className="nav-label">{item.label}</span>}
                     </Nav.Link>
                 ))}
 
-                <hr className="mx-3 border-light border-opacity-25" />
+                <div className="nav-divider"></div>
 
                 <Nav.Link
                     href="#"
-                    className="nav-link px-3 py-3"
+                    className="nav-item"
                     onClick={(e) => {
                         e.preventDefault();
                         navigate('/');
                     }}
+                    title={isCollapsed ? 'Change Outlet' : ''}
                 >
-                    <i className="bi bi-arrow-left me-2"></i>
-                    Change Outlet
+                    <i className="bi bi-arrow-left nav-icon"></i>
+                    {!isCollapsed && <span className="nav-label">Change Outlet</span>}
                 </Nav.Link>
 
-                <Nav.Link
-                    href="#"
-                    className="nav-link px-3 py-3"
-                >
-                    Developed By:<br></br>
-                    Harshana & Millinda<br></br>
-                    Contact Us:<br></br>
-                    0768585130<br></br>
-                    0767828753<br></br>
-                </Nav.Link>
-
+                {!isCollapsed && (
+                    <div className="developer-info">
+                        <div className="developer-title">Developed By:</div>
+                        <div className="developer-names">Harshana & Milinda</div>
+                        <div className="contact-title">Contact Us:</div>
+                        <div className="contact-numbers">
+                            <div>0768585130</div>
+                            <div>0767828753</div>
+                        </div>
+                    </div>
+                )}
             </Nav>
         </div>
     );
